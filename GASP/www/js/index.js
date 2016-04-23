@@ -1,49 +1,85 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
+var createLogObject = function (app) {
+    var symptom = document.getElementById('symptomSelect').value,
+        pain = document.getElementById('painRange').value;
+    var now = new Date();
+
+    var data = {
+        symptom: symptom,
+        severity: parseInt(pain, 10),
+        ip: app.ip,
+        location: app.location,
+        time: now.toISOString()
+    };
+
+    console.log(data);
+
+    return data;
+};
+
+var sendToDB = function (data) {
+    var request = new XMLHttpRequest();
+    request.open('POST', 'http://40.83.188.181:9200/user/symptoms', true);
+    request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+    request.send(JSON.stringify(data));
+};
+
+let getIPAddress = function (success, fail) {
+    fail = fail || function () {};
+    var request = new XMLHttpRequest();
+    request.open('GET', 'http://jsonip.com/', true);
+
+    request.onload = function () {
+        if (this.status >= 200 && this.status < 400) {
+            // Success!
+            var data = JSON.parse(this.response);
+            success(data);
+        } else {
+            // We reached our target server, but it returned an error
+            fail();
+        }
+    };
+
+    request.onerror = function () {
+        fail();
+    };
+
+    request.send();
+};
+
 var app = {
     // Application Constructor
     initialize: function() {
         this.bindEvents();
+        this.locaiton = [];
+        this.ip = null;
     },
     // Bind Event Listeners
     //
     // Bind any events that are required on startup. Common events are:
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
-        document.addEventListener('deviceready', this.onDeviceReady, false);
+        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
     },
     // deviceready Event Handler
     //
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        app.receivedEvent('deviceready');
+        var self = this;
+        this.receivedEvent('deviceready');
+        getIPAddress(function (data) {
+            self.ip = data.ip;
+        });
+        navigator.geolocation.getCurrentPosition(function (data) {
+            self.location = [data.coords.latitude, data.coords.longitude];
+        });
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
-        console.log('Received Event: ' + id);
+        var self = this;
+        document.querySelector('.js-log').addEventListener('click', function () {
+            var data = createLogObject(self);
+            sendToDB(data);
+        }, false);
     }
 };
