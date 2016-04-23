@@ -23,7 +23,7 @@ var sendToDB = function (data) {
     request.send(JSON.stringify(data));
 };
 
-let getIPAddress = function (success, fail) {
+var getIPAddress = function (success, fail) {
     fail = fail || function () {};
     var request = new XMLHttpRequest();
     request.open('GET', 'http://jsonip.com/', true);
