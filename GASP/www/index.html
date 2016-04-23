@@ -8,7 +8,8 @@
     <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/styles.css" />
-    <title>Bel Air</title>
+    <link rel="stylesheet" type="text/css" href="css/fontelico.css" />
+    <title>AirCheck</title>
 </head>
 
 <body>
@@ -30,9 +31,13 @@
                 </select>
             </div>
 
+            <div class="form-group spaced-double">
+                <h2 class="icon-emo-grin" id="mood"></h2>
+                <p for="mood" id="moodDesc">I've never felt better</p>
+            </div>
             <div class="form-group">
-                <label for="painRange">How severe is your symptom?</label>
-                <input type="range" id="painRange" value="0" max="10" />
+                <label for="painRange">How severe are your symptoms?</label>
+                <input type="range" id="painRange" value="0" max="10" onchange="updateFace(this.value);" oninput="updateFace(this.value);"/>
             </div>
 
             <div>
