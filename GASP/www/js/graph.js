@@ -78,59 +78,9 @@ var app = {
     receivedEvent: function(id) {
         var self = this;
         document.querySelector('.js-log').addEventListener('click', function () {
-            var data = createLogObject(self);
-            sendToDB(data);
-		location.href ="graph.html";
+            //var data = createLogObject(self);
+            //sendToDB(data);
+		location.href ="index.html";
         }, false);
     }
-};
-
-function updateFace(val) {
-	var Mood = document.getElementById('mood');
-	var Desc = document.getElementById('moodDesc');
-
-	if(val==0) {
-		Mood.className = "icon-emo-grin";
-		Desc.innerHTML = "I've never felt better";
-	}
-	else if(val==1) {
-		Mood.className = "icon-emo-grin";
-		Desc.innerHTML = "I can't complain";
-	}
-	else if(val==2) {
-		Mood.className = "icon-emo-happy";
-		Desc.innerHTML = "I feel swell";
-	}
-	else if(val==3) {
-		Mood.className = "icon-emo-happy";
-		Desc.innerHTML = "I feel pretty good";
-	}
-	else if(val==4) {
-		Mood.className = "icon-emo-displeased";
-		Desc.innerHTML = "I feel alright";
-	}
-	else if(val==5) {
-		Mood.className = "icon-emo-displeased";
-		Desc.innerHTML = "I feel meh";
-	}
-	else if(val==6) {
-		Mood.className = "icon-emo-unhappy";
-		Desc.innerHTML = "I've been better";
-	}
-	else if(val==7) {
-		Mood.className = "icon-emo-unhappy";
-		Desc.innerHTML = "I'm not feeling well";
-	}
-	else if(val==8) {
-		Mood.className = "icon-emo-cry";
-		Desc.innerHTML = "I feel very sick";
-	}
-	else if(val==9) {
-		Mood.className = "icon-emo-cry";
-		Desc.innerHTML = "I feel horrible";
-	}
-	else if(val==10) {
-		Mood.className = "icon-emo-cry";
-		Desc.innerHTML = "I literally cannot breathe";
-	}
 };
