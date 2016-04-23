@@ -1,7 +1,48 @@
 .spaced-single {
     margin-bottom: 20px;
+	padding-top: 10%;
+	padding-bottom: 10%;
 }
 
 .spaced-double {
-    margin-bottom: 40px;
+    margin-bottom: 60px;
+	margin-top: 40px;
+	margin-left: 20px;
+	margin-right: 20px;
+	text-align: center;
+}
+
+.spaced-double img {
+	height: 100%;
+	width: 80%;
+}
+
+#painRange {
+	height: 75px;
+}
+
+#mood {
+	text-align: center;
+	font-size: 175px;
+	margin-top: 50px;
+}
+
+#moodDesc {
+	text-align: center;
+	font-size: 35px;
+	margin-bottom: 50px;
+}
+
+#logButton {
+	bottom: 5%;
+	margin-bottom: 5%;
+}
+
+.app {
+	height: 100vh;
+	background: #67A9BF; /* For browsers that do not support gradients */
+    	background: -webkit-linear-gradient(#4DA6FF, #67A9BF); /* For Safari 5.1 to 6.0 */
+    	background: -o-linear-gradient(#4DA6FF, #67A9BF); /* For Opera 11.1 to 12.0 */
+    	background: -moz-linear-gradient(#4DA6FF, #67A9BF); /* For Firefox 3.6 to 15 */
+    	background: linear-gradient(#4DA6FF, #67A9BF); /* Standard syntax */
 }

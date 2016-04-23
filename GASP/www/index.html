@@ -8,18 +8,18 @@
     <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/styles.css" />
-    <title>Bel Air</title>
+	<link rel="stylesheet" type="text/css" href="/css/fontelico.css" />
+    <title>AirCheck</title>
 </head>
 
 <body>
     <div class="app">
         <div class="container">
             <header class="text-center spaced-double">
-                <h1>AirCheck</h1>
+		<img src="../img/Symptom Log.png">
             </header>
-
             <div class="form-group spaced-double">
-                <select class="form-control" id="symptomSelect">
+		<select class="form-control" id="symptomSelect">
                     <option>Select your Symptom</option>
                     <option value="cough">Coughing</option>
                     <option value="wheeze">Wheezing</option>
@@ -28,11 +28,13 @@
                     <option value="noseBlock">Stuffy Nose</option>
                     <option value="itchyEyes">Itchy Eyes</option>
                 </select>
-            </div>
-
             <div class="form-group spaced-double">
+		<h2 class="icon-emo-grin" id="mood"></h2>
+		<p for="mood" id="moodDesc">I've never felt better</p>
+		</div>
+            <div class="form-group">
                 <label for="painRange">How severe are your symptoms?</label>
-                <input type="range" id="painRange" value="0" max="10" />
+                <input type="range" id="painRange" value="0" max="10" onchange="updateFace(this.value);" oninput="updateFace(this.value);"/>
             </div>
 
             <button class="js-log btn btn-primary btn-block" id="logButton">Log My Symptoms</button>
