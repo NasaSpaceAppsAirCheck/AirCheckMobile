@@ -17,6 +17,7 @@ var handleRequestLoad = function (success, fail) {
 var resetForm = function () {
     document.getElementById('symptomSelect').options[0].selected = true;
     document.getElementById('painRange').value = 0;
+    updateFace(0);
 };
 
 var sendToDB = function (data, success, fail) {
