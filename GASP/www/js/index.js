@@ -81,9 +81,6 @@ var app = {
     onDeviceReady: function () {
         var self = this;
         this.receivedEvent('deviceready');
-        navigator.geolocation.getCurrentPosition(function (data) {
-            self.location = [data.coords.latitude.toFixed(4), data.coords.longitude.toFixed(4)];
-        });
     },
 
     sendUpdate: function (data) {
@@ -92,8 +89,10 @@ var app = {
                 navigator.notification.alert('Your data has been logged.', function () {
                     resetForm();
                 }, 'Thanks!');
-            }).catch(function () {
-                alert('error');
+            }).catch(function (error) {
+                navigator.notification.alert('Your data has been logged.', function () {
+                    resetForm();
+                }, 'ERROR!');
             });
     },
 
@@ -101,21 +100,23 @@ var app = {
         var self = this;
 
         $('.js-log').on('click', function () {
-            var data = self.createLogObject(self);
-
-            getAQI(data)
-                .then(function (resp_data) {
-                    var AQIs = resp_data.map(function (rec) {
-                        return rec.AQI;
+            var data = self.createLogObject();
+            navigator.geolocation.getCurrentPosition(function (loc_data) {
+                self.location = [loc_data.coords.latitude.toFixed(4), loc_data.coords.longitude.toFixed(4)];
+                getAQI(data)
+                    .then(function (resp_data) {
+                        var AQIs = resp_data.map(function (rec) {
+                            return rec.AQI;
+                        });
+                        data.AQI = AQIs.max();
+                        self.sendUpdate(data);
+                    }).catch(function () {
+                        self.sendUpdate(data);
                     });
-                    data.AQI = AQIs.max();
-                    self.sendUpdate(data);
-                }).catch(function () {
-                    self.sendUpdate(data);
-                });
-
+            }, function (error) {
+                console.log(error);
+            });
         });
-
     },
 
     createLogObject: function () {
