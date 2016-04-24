@@ -3,6 +3,8 @@ Array.prototype.max = function() {
   return Math.max.apply(null, this);
 };
 
+$.fn.noop = function () {};
+
 var pain_ranges = [
     {
         icon: 'icon-emo-grin',
@@ -30,17 +32,6 @@ var pain_ranges = [
         color: '#FF0000'
     }
 ];
-
-var handleRequestLoad = function (success, fail) {
-    if (this.status >= 200 && this.status < 400) {
-        // Success!
-        var data = JSON.parse(this.response);
-        success(data);
-    } else {
-        // We reached our target server, but it returned an error
-        fail();
-    }
-};
 
 var updateFace = function (val) {
     $('#mood')
@@ -145,6 +136,11 @@ var app = {
                 .then(function (loc_data) {
                     self.location = [loc_data.coords.latitude.toFixed(4), loc_data.coords.longitude.toFixed(4)];
                     var data = self.createLogObject();
+                    if (data.symptom === 'Select your Symptom') {
+                        window.plugins.spinnerDialog.hide();
+                        navigator.notification.alert('You must select a symptom.', $.noop, 'ERROR!');
+                        return false;
+                    }
                     //Get AQI data.
                     getAQI(data)
                         .then(function (resp_data) {
