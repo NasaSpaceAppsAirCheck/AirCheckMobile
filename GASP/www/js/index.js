@@ -7,27 +7,27 @@ var pain_ranges = [
     {
         icon: 'icon-emo-grin',
         text: 'I\'ve never felt better',
-	color: '#00CC00'
+        color: '#00CC00'
     },
     {
         icon: 'icon-emo-happy',
         text: 'I can\'t complain',
-	color: '#33CC99'
+        color: '#33CC99'
     },
     {
         icon: 'icon-emo-displeased',
         text: 'I feel meh',
-	color: '#006699'
+        color: '#006699'
     },
     {
         icon: 'icon-emo-unhappy',
         text: 'I don\'t feel so good',
-	color: '#FF9900'
+        color: '#FF9900'
     },
     {
         icon: 'icon-emo-cry',
         text: 'I feel horrible',
-	color: '#FF0000'
+        color: '#FF0000'
     }
 ];
 
@@ -43,19 +43,22 @@ var handleRequestLoad = function (success, fail) {
 };
 
 var updateFace = function (val) {
-    var Mood = document.getElementById('mood');
-    var Desc = document.getElementById('moodDesc');
+    $('#mood')
+        .css({
+            'color': pain_ranges[val].color,
+            'borderColor': pain_ranges[val].color
+        })
+        .attr('class', pain_ranges[val].icon);
 
-    Mood.className = pain_ranges[val].icon;
-    Desc.innerHTML = pain_ranges[val].text;
-	Mood.style.color = pain_ranges[val].color;
-	Mood.style.borderColor = pain_ranges[val].color;
+    $('#moodDesc')
+
+        .text(pain_ranges[val].text);
 };
 
 // Not a sustainable solution. Don't do this Ever!
 var resetForm = function () {
-    document.getElementById('symptomSelect').options[0].selected = true;
-    document.getElementById('painRange').value = 0;
+    $('#symptomSelect')[0].options[0].selected = true;
+    $('#painRange').val(0);
     updateFace(0);
 };
 
@@ -93,42 +96,32 @@ var app = {
     sendUpdate: function (data) {
         sendToDB(data)
             .then(function () {
+                window.plugins.spinnerDialog.hide();
                 navigator.notification.alert('Your data has been logged.', function () {
                     resetForm();
                 }, 'Thanks!');
             }).catch(function (error) {
+                window.plugins.spinnerDialog.hide();
                 navigator.notification.alert('Your data has been logged.', function () {
                     resetForm();
                 }, 'ERROR!');
             });
     },
 
-    receivedEvent: function (id) {
-        var self = this;
-
-        $('.js-log').on('click', function () {
-            var data = self.createLogObject();
+    getLocation: function () {
+        return new Promise(function (resolve, reject) {
             navigator.geolocation.getCurrentPosition(function (loc_data) {
-                self.location = [loc_data.coords.latitude.toFixed(4), loc_data.coords.longitude.toFixed(4)];
-                getAQI(data)
-                    .then(function (resp_data) {
-                        var AQIs = resp_data.map(function (rec) {
-                            return rec.AQI;
-                        });
-                        data.AQI = AQIs.max();
-                        self.sendUpdate(data);
-                    }).catch(function () {
-                        self.sendUpdate(data);
-                    });
+                console.log(loc_data);
+                resolve(loc_data);
             }, function (error) {
-                console.log(error);
+                reject(error);
             });
         });
     },
 
     createLogObject: function () {
-        var symptom = document.getElementById('symptomSelect').value,
-            pain = document.getElementById('painRange').value;
+        var symptom = $('#symptomSelect').val(),
+            pain = $('#painRange').val();
 
         var now = new Date();
 
@@ -140,5 +133,36 @@ var app = {
         };
 
         return data;
+    },
+
+    receivedEvent: function (id) {
+        var self = this;
+
+        $('.js-log').on('click', function () {
+            window.plugins.spinnerDialog.show(null, null, true);
+            // Get Location data.
+            self.getLocation()
+                .then(function (loc_data) {
+                    self.location = [loc_data.coords.latitude.toFixed(4), loc_data.coords.longitude.toFixed(4)];
+                    var data = self.createLogObject();
+                    //Get AQI data.
+                    getAQI(data)
+                        .then(function (resp_data) {
+                            // extract all AQI values from resp_data, and get the max value.
+                            data.AQI = resp_data.map(function (rec) {
+                                return rec.AQI;
+                            }).max();
+                            // Send update with AQI.
+                            self.sendUpdate(data);
+                        }).catch(function () {
+                            // Send update without AQI.
+                            self.sendUpdate(data);
+                        });
+                }).catch(function (error) {
+                    // Send update even if there is an error
+                    // won't include location or AQI information.
+                    self.sendUpdate(data);
+                });
+        });
     }
 };
