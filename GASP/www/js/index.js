@@ -131,6 +131,8 @@ function updateFace(val) {
     var Mood = document.getElementById('mood');
     var Desc = document.getElementById('moodDesc');
 
+
+
     if(val==0) {
         Mood.className = "icon-emo-grin";
         Desc.innerHTML = "I've never felt better";
