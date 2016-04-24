@@ -9,10 +9,12 @@
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/graph.css" />
 	<link rel="stylesheet" type="text/css" href="/css/fontelico.css" />
-
-	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript" src="../js/graph.js"></script>
-
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.css">
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>	
+	<script type="text/javascript">
+		google.load("visualization", "1", {packages:["corechart"]});
+    		google.setOnLoadCallback(drawChart());	
+	</script>
     <title>Thank you!</title>
 </head>
 
@@ -25,7 +27,16 @@
             <div class="form-group spaced-double">
 		<h1>Thank you for your input!</h1>
 		<h3>What others around you are feeling</h3>
-		<div id="chart_div"></div>
+		<select class="form-control" id="beer-season">
+            		<option>Select Air Quality Index</option>
+            		<option>Good (AQI 1-50)</option>
+            		<option>Moderate (AQI 51-100)</option>
+            		<option>Unhealthy for Sensitive Groups (AQI 101-150)</option>
+            		<option>Unhealthy (AQI 151-200)</option>
+            		<option>Very Unhealthy (AQI 201-250)</option>
+            		<option>Hazardous (AQI 251-300)</option>
+         	</select>
+      			<div id="chart_div" style="width: 400px; height: 300px;"></div>
 		<h2>Please check in with us soon!</h2>
 		<button class="js-log btn btn-primary btn-block" id="homeButton">Home</button>
         </div>
@@ -36,5 +47,12 @@
         app.initialize();
     </script>
 </body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/umd/dropdown.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+	google.charts.setOnLoadCallback(drawChart());
+  </script>
 
 </html>
