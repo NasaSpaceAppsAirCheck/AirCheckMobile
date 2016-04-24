@@ -61,6 +61,7 @@ var app = {
         this.locaiton = [];
         this.ip = null;
     },
+
     // Bind Event Listeners
     //
     // Bind any events that are required on startup. Common events are:
@@ -68,6 +69,7 @@ var app = {
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
     },
+
     // deviceready Event Handler
     //
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
@@ -90,6 +92,7 @@ var app = {
             alert('error');
         });
     },
+
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         var self = this;
@@ -130,51 +133,28 @@ var app = {
 function updateFace(val) {
     var Mood = document.getElementById('mood');
     var Desc = document.getElementById('moodDesc');
-
-
-
-    if(val==0) {
-        Mood.className = "icon-emo-grin";
-        Desc.innerHTML = "I've never felt better";
-    }
-    else if(val==1) {
-        Mood.className = "icon-emo-grin";
-        Desc.innerHTML = "I can't complain";
-    }
-    else if(val==2) {
-        Mood.className = "icon-emo-happy";
-        Desc.innerHTML = "I feel swell";
-    }
-    else if(val==3) {
-        Mood.className = "icon-emo-happy";
-        Desc.innerHTML = "I feel pretty good";
-    }
-    else if(val==4) {
-        Mood.className = "icon-emo-displeased";
-        Desc.innerHTML = "I feel alright";
-    }
-    else if(val==5) {
-        Mood.className = "icon-emo-displeased";
-        Desc.innerHTML = "I feel meh";
-    }
-    else if(val==6) {
-        Mood.className = "icon-emo-unhappy";
-        Desc.innerHTML = "I've been better";
-    }
-    else if(val==7) {
-        Mood.className = "icon-emo-unhappy";
-        Desc.innerHTML = "I'm not feeling well";
-    }
-    else if(val==8) {
-        Mood.className = "icon-emo-cry";
-        Desc.innerHTML = "I feel very sick";
-    }
-    else if(val==9) {
-        Mood.className = "icon-emo-cry";
-        Desc.innerHTML = "I feel horrible";
-    }
-    else if(val==10) {
-        Mood.className = "icon-emo-cry";
-        Desc.innerHTML = "I literally cannot breathe";
-    }
+    var values = [
+        {
+            icon: 'icon-emo-grin',
+            text: 'I\'ve never felt better'
+        },
+        {
+            icon: 'icon-emo-happy',
+            text: 'I can\'t complain'
+        },
+        {
+            icon: 'icon-emo-displeased',
+            text: 'I feel meh'
+        },
+        {
+            icon: 'icon-emo-unhappy',
+            text: 'I don\'t feel so good'
+        },
+        {
+            icon: 'icon-emo-cry',
+            text: 'I feel horrible'
+        }
+    ];
+    Mood.className = values[val].icon;
+    Desc.innerHTML = values[val].text;
 };
