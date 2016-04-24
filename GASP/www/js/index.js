@@ -109,6 +109,7 @@ var app = {
         }, false);
 
     },
+
     createLogObject: function () {
         var symptom = document.getElementById('symptomSelect').value,
             pain = document.getElementById('painRange').value;
