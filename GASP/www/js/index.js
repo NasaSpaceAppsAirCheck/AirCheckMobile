@@ -80,7 +80,10 @@ var app = {
         document.querySelector('.js-log').addEventListener('click', function () {
             var data = createLogObject(self);
             sendToDB(data);
-		location.href ="graph.html";
+		updateFace(0);
+		document.getElementById('painRange').value = 0;
+		document.getElementById('symptomSelect').selectedIndex = 0;
+		//location.href ="graph.html";
         }, false);
     }
 };
