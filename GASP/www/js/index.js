@@ -7,27 +7,27 @@ var pain_ranges = [
     {
         icon: 'icon-emo-grin',
         text: 'I\'ve never felt better',
-    color: '#00CC00'
+        color: '#00CC00'
     },
     {
         icon: 'icon-emo-happy',
         text: 'I can\'t complain',
-    color: '#33CC99'
+        color: '#33CC99'
     },
     {
         icon: 'icon-emo-displeased',
         text: 'I feel meh',
-    color: '#006699'
+        color: '#006699'
     },
     {
         icon: 'icon-emo-unhappy',
         text: 'I don\'t feel so good',
-    color: '#FF9900'
+        color: '#FF9900'
     },
     {
         icon: 'icon-emo-cry',
         text: 'I feel horrible',
-    color: '#FF0000'
+        color: '#FF0000'
     }
 ];
 
@@ -43,10 +43,16 @@ var handleRequestLoad = function (success, fail) {
 };
 
 var updateFace = function (val) {
-    $('#mood').attr('class', pain_ranges[val].icon)
-    $('#moodDesc').text(pain_ranges[val].text)
-    Mood.style.color = pain_ranges[val].color;
-    Mood.style.borderColor = pain_ranges[val].color;
+    $('#mood')
+        .css({
+            'color': pain_ranges[val].color,
+            'borderColor': pain_ranges[val].color
+        })
+        .attr('class', pain_ranges[val].icon);
+
+    $('#moodDesc')
+
+        .text(pain_ranges[val].text);
 };
 
 // Not a sustainable solution. Don't do this Ever!
