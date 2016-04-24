@@ -1,51 +1,3 @@
-var createLogObject = function (app) {
-    var symptom = document.getElementById('symptomSelect').value,
-        pain = document.getElementById('painRange').value;
-    var now = new Date();
-
-    var data = {
-        symptom: symptom,
-        severity: parseInt(pain, 10),
-        ip: app.ip,
-        location: app.location,
-        time: now.toISOString()
-    };
-
-    console.log(data);
-
-    return data;
-};
-
-var sendToDB = function (data) {
-    var request = new XMLHttpRequest();
-    request.open('POST', 'http://40.83.188.181:9200/user/symptoms', true);
-    request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-    request.send(JSON.stringify(data));
-};
-
-var getIPAddress = function (success, fail) {
-    fail = fail || function () {};
-    var request = new XMLHttpRequest();
-    request.open('GET', 'http://jsonip.com/', true);
-
-    request.onload = function () {
-        if (this.status >= 200 && this.status < 400) {
-            // Success!
-            var data = JSON.parse(this.response);
-            success(data);
-        } else {
-            // We reached our target server, but it returned an error
-            fail();
-        }
-    };
-
-    request.onerror = function () {
-        fail();
-    };
-
-    request.send();
-};
-
 var app = {
     // Application Constructor
     initialize: function() {
@@ -84,3 +36,38 @@ var app = {
         }, false);
     }
 };
+
+
+      // Load the Visualization API and the corechart package.
+google.charts.load('current', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+google.charts.setOnLoadCallback(drawChart);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+
+function drawChart() {
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+        data.addRows([
+          ['Mushrooms', 3],
+          ['Onions', 1],
+          ['Olives', 1],
+          ['Zucchini', 1],
+          ['Pepperoni', 2]
+        ]);
+
+        // Set chart options
+        var options = {'title':'How Much Pizza I Ate Last Night',
+                       'width':400,
+                       'height':300};
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+}
