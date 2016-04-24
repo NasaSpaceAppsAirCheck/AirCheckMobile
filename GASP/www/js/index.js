@@ -1,6 +1,30 @@
+// Add Array.max to Array.prototype.
 Array.prototype.max = function() {
   return Math.max.apply(null, this);
 };
+
+var pain_ranges = [
+    {
+        icon: 'icon-emo-grin',
+        text: 'I\'ve never felt better'
+    },
+    {
+        icon: 'icon-emo-happy',
+        text: 'I can\'t complain'
+    },
+    {
+        icon: 'icon-emo-displeased',
+        text: 'I feel meh'
+    },
+    {
+        icon: 'icon-emo-unhappy',
+        text: 'I don\'t feel so good'
+    },
+    {
+        icon: 'icon-emo-cry',
+        text: 'I feel horrible'
+    }
+];
 
 var handleRequestLoad = function (success, fail) {
     if (this.status >= 200 && this.status < 400) {
@@ -13,67 +37,48 @@ var handleRequestLoad = function (success, fail) {
     }
 };
 
+var updateFace = function (val) {
+    var Mood = document.getElementById('mood');
+    var Desc = document.getElementById('moodDesc');
+
+    Mood.className = pain_ranges[val].icon;
+    Desc.innerHTML = pain_ranges[val].text;
+};
+
 // Not a sustainable solution. Don't do this Ever!
 var resetForm = function () {
     document.getElementById('symptomSelect').options[0].selected = true;
     document.getElementById('painRange').value = 0;
-	updateFace(0);
+    updateFace(0);
 };
 
 var sendToDB = function (data, success, fail) {
     var url = 'http://40.83.188.181:9200/user/symptoms';
-    var request = new XMLHttpRequest();
-    request.open('POST', url, true);
-    request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-    request.onload = handleRequestLoad.bind(request, success, fail);
-    request.onerror = function () { fail(); };
-    request.send(JSON.stringify(data));
-};
-
-var sendToLogger = function (data) {
-    var url = 'http://requestb.in/1cidfkx1';
-    var request = new XMLHttpRequest();
-    request.open('POST', url, true);
-    request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-    request.send(JSON.stringify(data));
+    return axios.post(url, data, {
+        headers: {'Content-Type': 'application/json; charset=UTF-8'}
+    });
 };
 
 var api_key = '2E94CAB9-D695-479D-9CB1-4EDE99530CDD';
 
-var getAQI = function (data, success, fail) {
-    fail = fail || function () {};
+var getAQI = function (data) {
     var url = 'http://www.airnowapi.org/aq/observation/latLong/current/?format=application/json&latitude=' + data.location[0] + '&longitude=' + data.location[1] + '&distance=25&API_KEY=' + api_key;
-    var request = new XMLHttpRequest();
-    request.open('GET', url, true);
-
-    request.onload = handleRequestLoad.bind(request, success, fail);
-
-    request.onerror = function () {
-        fail();
-    };
-
-    request.send();
+    return axios.get(url);
 };
 
 var app = {
-    // Application Constructor
-    initialize: function() {
+
+    initialize: function () {
         this.bindEvents();
         this.locaiton = [];
         this.ip = null;
     },
-    // Bind Event Listeners
-    //
-    // Bind any events that are required on startup. Common events are:
-    // 'load', 'deviceready', 'offline', and 'online'.
-    bindEvents: function() {
-        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+
+    bindEvents: function () {
+        $(document).on('deviceready', this.onDeviceReady.bind(this));
     },
-    // deviceready Event Handler
-    //
-    // The scope of 'this' is the event. In order to call the 'receivedEvent'
-    // function, we must explicitly call 'app.receivedEvent(...);'
-    onDeviceReady: function() {
+
+    onDeviceReady: function () {
         var self = this;
         this.receivedEvent('deviceready');
         navigator.geolocation.getCurrentPosition(function (data) {
@@ -82,32 +87,34 @@ var app = {
     },
 
     sendUpdate: function (data) {
-        sendToDB(data, function () {
-            navigator.notification.alert('Your data has been logged.', function () {
-                sendToLogger(data);
-                resetForm();
-            }, 'Thanks!');
-        }, function () {
-            alert('error');
-        });
+        sendToDB(data)
+            .then(function () {
+                navigator.notification.alert('Your data has been logged.', function () {
+                    resetForm();
+                }, 'Thanks!');
+            }).catch(function () {
+                alert('error');
+            });
     },
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
+
+    receivedEvent: function (id) {
         var self = this;
 
-        document.querySelector('.js-log').addEventListener('click', function () {
+        $('.js-log').on('click', function () {
             var data = self.createLogObject(self);
-            getAQI(data, function (resp_data) {
-                var AQIs = resp_data.map(function (rec) {
-                    return rec.AQI;
-                })
-                data.AQI = AQIs.max();
-                self.sendUpdate(data);
-            }, function () {
-                self.sendUpdate(data);
-            });
 
-        }, false);
+            getAQI(data)
+                .then(function (resp_data) {
+                    var AQIs = resp_data.map(function (rec) {
+                        return rec.AQI;
+                    });
+                    data.AQI = AQIs.max();
+                    self.sendUpdate(data);
+                }).catch(function () {
+                    self.sendUpdate(data);
+                });
+
+        });
 
     },
 
@@ -126,30 +133,4 @@ var app = {
 
         return data;
     }
-};
-
-function updateFace(val) {
-    var Mood = document.getElementById('mood');
-	var Desc = document.getElementById('moodDesc');
-
-	if(val==0) {
-		Mood.className = "icon-emo-grin";
-		Desc.innerHTML = "I've never felt better";
-	}
-	else if(val==1) {
-		Mood.className = "icon-emo-happy";
-		Desc.innerHTML = "I can't complain";
-	}
-	else if(val==2) {
-		Mood.className = "icon-emo-displeased";
-		Desc.innerHTML = "I feel meh";
-	}
-	else if(val==3) {
-		Mood.className = "icon-emo-unhappy";
-		Desc.innerHTML = "I don't feel so good";
-	}
-	else if(val==4) {
-		Mood.className = "icon-emo-cry";
-		Desc.innerHTML = "I feel horrible";
-	}
 };

@@ -1,44 +1,45 @@
-.spaced-single {
-    margin-bottom: 20px;
-	padding-top: 10%;
-	padding-bottom: 10%;
-}
-
-.spaced-double {
-    margin-bottom: 60px;
-	margin-top: 40px;
-	margin-left: 20px;
-	margin-right: 20px;
-	text-align: center;
-}
-
-.spaced-double img {
-	height: 100%;
-	width: 80%;
-}
-
-#painRange {
-	height: 75px;
-}
-
-#mood {
-	text-align: center;
-	font-size: 175px;
-	margin-top: 50px;
-}
-
-#moodDesc {
-	text-align: center;
-	font-size: 35px;
-	margin-bottom: 50px;
-}
-
-#logButton {
-	bottom: 5%;
-	margin-bottom: 5%;
+body {
+    -webkit-touch-callout: none; /* prevent callout to copy image, etc when tap to hold */
+    -webkit-text-size-adjust: none; /* prevent webkit from resizing text to fit */
+    -webkit-user-select: none; /* prevent copy paste, to allow, change 'none' to 'text' */
 }
 
 .app {
-	height: 100vh;
-	background: #EEEEEE; /* For browsers that do not support gradients */
+    height: 100vh;
+    background: #eee;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100vh;
+}
+
+#painRange {
+    height: 75px;
+}
+
+#mood {
+    display: flex;
+    text-align: center;
+    font-size: 3em;
+    border: solid 0.107em #333;
+    border-radius: 50%;
+    width: 1.75em;
+    height: 1.75em;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    margin: 0 auto;
+}
+
+#moodDesc {
+    text-align: center;
+    font-size: 2em;
+}
+
+#logButton {
+    margin-bottom: 10px;
 }
