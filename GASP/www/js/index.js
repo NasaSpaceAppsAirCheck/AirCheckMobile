@@ -6,23 +6,28 @@ Array.prototype.max = function() {
 var pain_ranges = [
     {
         icon: 'icon-emo-grin',
-        text: 'I\'ve never felt better'
+        text: 'I\'ve never felt better',
+	color: '#00CC00'
     },
     {
         icon: 'icon-emo-happy',
-        text: 'I can\'t complain'
+        text: 'I can\'t complain',
+	color: '#33CC99'
     },
     {
         icon: 'icon-emo-displeased',
-        text: 'I feel meh'
+        text: 'I feel meh',
+	color: '#006699'
     },
     {
         icon: 'icon-emo-unhappy',
-        text: 'I don\'t feel so good'
+        text: 'I don\'t feel so good',
+	color: '#FF9900'
     },
     {
         icon: 'icon-emo-cry',
-        text: 'I feel horrible'
+        text: 'I feel horrible',
+	color: '#FF0000'
     }
 ];
 
@@ -43,6 +48,8 @@ var updateFace = function (val) {
 
     Mood.className = pain_ranges[val].icon;
     Desc.innerHTML = pain_ranges[val].text;
+	Mood.style.color = pain_ranges[val].color;
+	Mood.style.borderColor = pain_ranges[val].color;
 };
 
 // Not a sustainable solution. Don't do this Ever!
