@@ -10,9 +10,18 @@ body {
 }
 
 .container {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: column;
-    justify-content: space-around;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-justify-content: space-around;
+        -ms-flex-pack: distribute;
+            justify-content: space-around;
     height: 100vh;
 }
 
@@ -21,6 +30,9 @@ body {
 }
 
 #mood {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
     text-align: center;
     font-size: 3em;
@@ -28,10 +40,20 @@ body {
     border-radius: 50%;
     width: 1.75em;
     height: 1.75em;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-    align-self: center;
+    -webkit-align-content: center;
+        -ms-flex-line-pack: center;
+            align-content: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-align-self: center;
+        -ms-flex-item-align: center;
+            align-self: center;
     margin: 0 auto;
 	color: #00CC00;
 	border-color: #00CC00;
